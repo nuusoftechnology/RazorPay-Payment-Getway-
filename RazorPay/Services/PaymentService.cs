@@ -11,7 +11,7 @@ namespace RazorPay.Services
             string paymentId = httpContextAccessor.HttpContext.Request.Form["rzp_paymentid"].ToString();
             // This is orderId
             string orderId = httpContextAccessor.HttpContext.Request.Form["rzp_orderid"];
-            RazorpayClient client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
+            RazorpayClient client = new RazorpayClient("rzp_test_ZL1a7FyyQVV-w3h", "stuoN7OM8kNOYtZzIc4s4-Ukb-");
 
             Payment payment = client.Payment.Fetch(paymentId);
             // This code is for capture the payment 
