@@ -1,0 +1,46 @@
+﻿@model PaymentRequest
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="container">
+    <form asp-action="ProcessRequestOrder" asp-antiforgery="true" asp-controller="Home" autocomplete="off">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Name:</label>
+                        <input asp-for="Name" placeholder="Enter your name" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Email:</label>
+                        <input asp-for="Email" placeholder="Enter your name" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Contact Number:</label>
+                        <input asp-for="ContactNumber" placeholder="Enter your name" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Amount:</label>
+                        <input asp-for="Amount" placeholder="Enter your name" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <textarea asp-for="Address" class="form-control"></textarea>
+                </div>
+                <div class="row">
+                    <div>
+                        <input type="submit" value="Payment" class="btn btn-outline-success"/>
+                    </div>
+                    <div>
+                        <input type="button" value="Cancel" class="btn btn-outline-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
