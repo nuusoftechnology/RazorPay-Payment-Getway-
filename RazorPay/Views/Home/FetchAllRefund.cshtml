@@ -1,0 +1,35 @@
+﻿@using Razorpay.Api;
+@model IEnumerable<Refund>
+@{
+    ViewData["Title"] = "FetchAllRefund";
+}
+
+<h1>FetchAllRefund</h1>
+
+<h2>Page Under proccess......................</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>RefundId</th>
+            <th>PaymentId</th>
+            <th>amount</th>
+            <th>currency</th>
+            <th>receipt</th>
+            <th>status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Attributes["id"]</td>
+                <td>@item.Attributes["payment_id"]</td>
+                <td>@item.Attributes["amount"]</td>
+                <td>@item.Attributes["currency"]</td>
+                <td>@item.Attributes["receipt"]</td>
+                <td>@item.Attributes["status"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

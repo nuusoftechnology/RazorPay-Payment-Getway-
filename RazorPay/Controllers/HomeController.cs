@@ -39,6 +39,31 @@ namespace RazorPay.Controllers
         {
             return View("_OrderStatus",Status);
         }
+        public async Task<IActionResult> FetchAllRefund()
+        {
+            var refund = await _paymentService.FetchAllRefundOrder();
+            return View(refund);
+        }
+        public IActionResult CreateANormalRefund()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateANormalRefund(PaymentRefund payment)
+        {
+            var refund = await _paymentService.CreateANormalRefund(payment);
+            return View("_OrderStatus", refund.Attributes["status"].ToString());
+        }
+        public IActionResult CreateAnInstantRefund()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAnInstantRefund(PaymentRefund payment)
+        {
+            var refund = await _paymentService.CreateAnInstantRefund(payment);
+            return View("_OrderStatus", refund.Attributes["status"].ToString());
+        }
 
         public IActionResult Privacy()
         {
