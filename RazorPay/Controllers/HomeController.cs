@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Razorpay.Api;
 using RazorPay.IServices;
 using RazorPay.Models;
 using System.Diagnostics;
@@ -20,6 +21,11 @@ namespace RazorPay.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> GetAllPayment()
+        {
+            var payment = await _paymentService.FetchAllPayments();
+            return View(payment);
+        }
         [HttpPost]
         public async Task<IActionResult> ProcessRequestOrder(PaymentRequest payment)
         {
@@ -37,16 +43,23 @@ namespace RazorPay.Controllers
         }
         public IActionResult status(string Status)
         {
-            return View("_OrderStatus",Status);
+            return View("_OrderStatus", Status);
         }
         public async Task<IActionResult> FetchAllRefund()
         {
             var refund = await _paymentService.FetchAllRefundOrder();
             return View(refund);
         }
-        public IActionResult CreateANormalRefund()
+        [HttpGet]
+        public IActionResult CreateANormalRefund(string id, decimal amount)
         {
-            return View();
+            PaymentRefund paymentRefund = new PaymentRefund() { paymentId = id, Amount = amount};
+            return View(paymentRefund);
+        }
+        public async Task<IActionResult> CapturePayment(string id, decimal amount)
+        {
+            var payment = await _paymentService.CapturePayment(id, amount);
+            return View("_OrderStatus", payment.Attributes["status"].ToString());
         }
         [HttpPost]
         public async Task<IActionResult> CreateANormalRefund(PaymentRefund payment)
@@ -54,9 +67,11 @@ namespace RazorPay.Controllers
             var refund = await _paymentService.CreateANormalRefund(payment);
             return View("_OrderStatus", refund.Attributes["status"].ToString());
         }
-        public IActionResult CreateAnInstantRefund()
+        [HttpGet]
+        public IActionResult CreateAnInstantRefund(string id, decimal amount)
         {
-            return View();
+            PaymentRefund paymentRefund = new PaymentRefund() { paymentId = id, Amount = amount };
+            return View(paymentRefund);
         }
         [HttpPost]
         public async Task<IActionResult> CreateAnInstantRefund(PaymentRefund payment)

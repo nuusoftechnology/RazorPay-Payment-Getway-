@@ -9,16 +9,25 @@ namespace RazorPay.Services
         private RazorpayClient client;
         public PaymentService()
         {
-            //client = new RazorpayClient("rzp_live_N6AwHPPkur5r3P", "7Q3pINUv4n19cQf0M7Csctkt");
-            client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
+            client = new RazorpayClient("--key--", "--secret--");
+            //client = new RazorpayClient("--key--", "--secret--");
         }
+
+        public async Task<Payment> CapturePayment(string PaymentId, decimal amount)
+        {
+            Dictionary<string, object> paymentRequest = new Dictionary<string, object>();
+            paymentRequest.Add("amount", amount);
+            paymentRequest.Add("currency", "INR");
+
+            Payment payment = client.Payment.Fetch(PaymentId).Capture(paymentRequest);
+            return await Task.FromResult(payment);
+        }
+
         public async Task<string> CompleteOrderProcess(IHttpContextAccessor httpContextAccessor)
         {
             string paymentId = httpContextAccessor.HttpContext.Request.Form["rzp_paymentid"].ToString();
             // This is orderId
             string orderId = httpContextAccessor.HttpContext.Request.Form["rzp_orderid"];
-            //RazorpayClient client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
-
             Payment payment = client.Payment.Fetch(paymentId);
             // This code is for capture the payment 
             Dictionary<string, object> options = new Dictionary<string, object>();
@@ -31,11 +40,10 @@ namespace RazorPay.Services
 
         public async Task<Refund> CreateAnInstantRefund(PaymentRefund paymentRefund)
         {
-            //String paymentId = "pay_Z6t7VFTb9xHeOs";
             try
             {
                 Dictionary<string, object> refundRequest = new Dictionary<string, object>();
-                refundRequest.Add("amount", paymentRefund.Amount * 100);
+                refundRequest.Add("amount", paymentRefund.Amount);
                 refundRequest.Add("speed", "optimum");
                 refundRequest.Add("receipt", paymentRefund.Receipt);
                 Refund refund = client.Payment.Fetch(paymentRefund.paymentId).Refund(refundRequest);
@@ -50,11 +58,10 @@ namespace RazorPay.Services
 
         public async Task<Refund> CreateANormalRefund(PaymentRefund paymentRefund)
         {
-            //string paymentId = "pay_Z6t7VFTb9xHeOs";
             try
             {
                 Dictionary<string, object> refundRequest = new Dictionary<string, object>();
-                refundRequest.Add("amount", paymentRefund.Amount * 100);
+                refundRequest.Add("amount", paymentRefund.Amount);
                 refundRequest.Add("speed", "normal");
                 Dictionary<string, object> notes = new Dictionary<string, object>();
                 notes.Add("notes_key_1", paymentRefund.Notes1);
@@ -73,14 +80,13 @@ namespace RazorPay.Services
         public async Task<List<Payment>> FetchAllPayments()
         {
             Dictionary<string, object> paymentRequest = new Dictionary<string, object>();
-            paymentRequest.Add("count", "10");
+            paymentRequest.Add("count", "100");
             List<Payment> payment = client.Payment.All(paymentRequest);
             return await Task.FromResult(payment);
         }
 
         public async Task<List<Refund>> FetchAllRefundOrder()
         {
-            //RazorpayClient client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
             Dictionary<string, object> paramRequest = new Dictionary<string, object>();
             //paramRequest.Add("from", "1");
             //paramRequest.Add("to", "1");
@@ -110,8 +116,6 @@ namespace RazorPay.Services
 
         public async Task<Refund> FetchParticularRefund(string refundId)
         {
-            //string refundId = "rfnd_Z6t7VFTb9xHeOs";
-
             Refund refund = client.Refund.Fetch(refundId);
             return await Task.FromResult(refund);
         }
@@ -122,12 +126,11 @@ namespace RazorPay.Services
             Random randomObj = new Random();
             string transactionId = randomObj.Next(001, 999).ToString();
             string receiptId = $"{Guid.NewGuid()}-{transactionId}";
-            //RazorpayClient client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
             Dictionary<string, object> options = new Dictionary<string, object>();
             options.Add("amount", payment.Amount * 100);  // Amount will in paise
             options.Add("receipt", receiptId);
             options.Add("currency", "INR");
-            options.Add("payment_capture", "1"); // 1 - automatic  , 0 - manual
+            options.Add("payment_capture", "0"); // 1 - automatic  , 0 - manual
                                                  //options.Add("notes", "-- You can put any notes here --");
             Order orderResponse = client.Order.Create(options);
             string orderId = orderResponse["id"].ToString();
@@ -135,7 +138,7 @@ namespace RazorPay.Services
             MerchantOrder merchantOrder = new MerchantOrder()
             {
                 OrderId = orderResponse.Attributes["id"],
-                RazorpayKey = "rzp_test_ZL1a7FyyQVVw3h",
+                RazorpayKey = "--key--",
                 Amount = payment.Amount * 100,
                 Currency = "INR",
                 Name = payment.Name,

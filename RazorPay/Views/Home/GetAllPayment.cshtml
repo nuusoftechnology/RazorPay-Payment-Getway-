@@ -1,0 +1,54 @@
+﻿@using Razorpay.Api
+@model IEnumerable<Payment>
+@{
+    ViewData["Title"] = "GetAllPayment";
+    int i = 0;
+}
+<a asp-action="Index" asp-controller="Home" class="btn btn-link">Make a new payment</a>
+<table class="table table-hover table-borderless">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Payment</th>
+            <th>currency</th>
+            <th>status</th>
+            <th>capture</th>
+            <th>method</th>
+            <th>amount refunded</th>
+            <th>refund status</th>
+            <th>contact</th>
+            <th>data</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(i += 1)</td>
+                <td>@(item.Attributes["amount"] / 100)</td>
+                <td>@item.Attributes["currency"]</td>
+                <td>@item.Attributes["status"]</td>
+                <td>@item.Attributes["captured"]</td>
+                <td>@item.Attributes["method"]</td>
+                <td>@(item.Attributes["amount_refunded"] / 100)</td>
+                <td>@item.Attributes["refund_status"]</td>
+                <td>@item.Attributes["contact"]</td>
+                <td>@Convert.ToDateTime(item.Attributes["created_at"])</td>
+                @if (item.Attributes["status"] == "captured")
+                {
+                    <td>
+                        <a asp-action="CreateANormalRefund" asp-controller="Home" asp-route-id="@item.Attributes["id"]" asp-route-amount="@item.Attributes["amount"]">Normal Refund</a> |
+                        <a asp-action="CreateAnInstantRefund" asp-controller="Home" asp-route-id="@item.Attributes["id"]" asp-route-amount="@item.Attributes["amount"]">Instant Refund</a>
+                    </td>
+                }
+                else if (item.Attributes["status"] == "failed")
+                {
+                    <td>
+                        <a asp-action="CapturePayment" asp-controller="Home" asp-route-id="@item.Attributes["id"]" asp-route-amount="@item.Attributes["amount"]">Capture Payment</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

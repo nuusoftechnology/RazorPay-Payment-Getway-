@@ -18,6 +18,7 @@ namespace RazorPay.IServices
         //Payments
         Task<List<Payment>> FetchAllPayments();
         Task<Payment> FetchAPayment(string PaymentId);
+        Task<Payment> CapturePayment(string PaymentId, decimal amount);
         //settlements
         //Task<List<Settlement>> FetchAllSettlements();
         //Task<Settlement> FetchAsettlement(string settlementId);
