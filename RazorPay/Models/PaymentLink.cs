@@ -5,6 +5,5 @@ namespace RazorPay.Models
 {
     public class PaymentLink : Entity
     {
-        
     }
 }

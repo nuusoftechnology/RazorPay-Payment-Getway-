@@ -77,9 +77,18 @@ namespace RazorPay.Controllers
         public async Task<IActionResult> CreateAnInstantRefund(PaymentRefund payment)
         {
             var refund = await _paymentService.CreateAnInstantRefund(payment);
-            return View("_OrderStatus", refund.Attributes["status"].ToString());
+            return View("_OrderStatus", refund.Attributes["status"].value.ToString());
         }
-
+        [HttpGet]
+        public async Task<IActionResult> StandardPaymentLink()
+        {
+            return View(await _paymentService.CreateStandardPaymentLink());
+        }
+        [HttpGet]
+        public async Task<IActionResult> GenerateQRCode()
+        {
+            return View(await _paymentService.CreateQRCode());
+        }
         public IActionResult Privacy()
         {
             return View();
