@@ -27,7 +27,7 @@ namespace RazorPay.Services
             //var handler = new HttpClientHandler { Credentials = credentials };
             _client = new HttpClient();
         }
-
+        //https://www.postman.com/razorpaydev/workspace/razorpay-public-workspace/collection/12492020-952c7295-118c-400f-8f2c-5266ef6f689a
         public async Task<Payment> CapturePayment(string PaymentId, decimal amount)
         {
             Dictionary<string, object> paymentRequest = new Dictionary<string, object>();
