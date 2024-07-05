@@ -2,16 +2,11 @@
 using Razorpay.Api;
 using RazorPay.IServices;
 using RazorPay.Models;
-using System.Net.Http;
-using System.Text.Json.Nodes;
-using System.Text;
-using System;
-using System.Net.Http.Headers;
-using System.Net;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using RestSharp;
+using System.Net;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RazorPay.Services
 {
@@ -94,7 +89,9 @@ namespace RazorPay.Services
 
         public async Task<string> CreateStandardPaymentLink()
         {
+            var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
+            //Test Mode
             string clientId = "rzp_test_ZL1a7FyyQVVw3h";
             string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
             var uri = "v1/payment_links";
@@ -102,12 +99,12 @@ namespace RazorPay.Services
             paymentLinkRequest.Add("amount", 1000);
             paymentLinkRequest.Add("currency", "INR");
             paymentLinkRequest.Add("accept_partial", false);
-            paymentLinkRequest.Add("first_min_partial_amount", 100);
-            paymentLinkRequest.Add("expire_by", DateTime.UtcNow.AddMinutes(15).Ticks);
-            paymentLinkRequest.Add("reference_id", "TSsd19896");
+            //paymentLinkRequest.Add("first_min_partial_amount", 100);
+            paymentLinkRequest.Add("expire_by", expTime);
+            //paymentLinkRequest.Add("reference_id", "GauravKumar");
             paymentLinkRequest.Add("description", "Payment for policy no #23456");
             Dictionary<string, string> customer = new Dictionary<string, string>();
-            customer.Add("contact", "+919999999999");
+            customer.Add("contact", "+918930394008");
             customer.Add("name", "Gaurav Kumar");
             customer.Add("email", "gaurav.kumar@example.com");
             paymentLinkRequest.Add("customer", customer);
@@ -115,38 +112,14 @@ namespace RazorPay.Services
             notify.Add("sms", true);
             notify.Add("email", true);
             paymentLinkRequest.Add("reminder_enable", true);
-            Dictionary<string, object> notes = new Dictionary<string, object>();
-            notes.Add("policy_name", "Jeevan Bima");
+            //Dictionary<string, object> notes = new Dictionary<string, object>();
+            //notes.Add("policy_name", "Jeevan Bima");
             paymentLinkRequest.Add("notes", notes);
-            paymentLinkRequest.Add("callback_url", "https://example-callback-url.com/");
+            paymentLinkRequest.Add("callback_url", "https://teraclab.com/");
             paymentLinkRequest.Add("callback_method", "get");
-            //var jsonData = JsonConvert.SerializeObject(paymentLinkRequest);
             var jsonData = System.Text.Json.JsonSerializer.Serialize(paymentLinkRequest);
-            //GetCredential(uri, clientId, clientSecret);
-            //_client.DefaultRequestHeaders.Add("accept", "application/json");
             var basicAuthenticationValue =
     Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
-
-            //_client.DefaultRequestHeaders.Authorization =
-            //    new AuthenticationHeaderValue("Basic", basicAuthenticationValue);
-
-            //_client.DefaultRequestHeaders.Authorization
-            //= new System.Net.Http.Headers.AuthenticationHeaderValue("Basic",
-            //    Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}")));
-
-            //string encoded = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes($"{clientId}:{clientSecret}"));
-
-            //var authenticationString = $"{clientId}:{clientSecret}";
-            //var base64EncodedAuthenticationString = Convert.ToBase64String(Encoding.UTF8.GetBytes(authenticationString));
-            //_client.DefaultRequestHeaders.Add("Authorization", "Basic " + basicAuthenticationValue);
-            //byte[] basicBytes = Encoding.Unicode.GetBytes($"{clientId}:{clientSecret}");
-            //string basicB64 = Convert.ToBase64String(basicBytes);
-
-            //_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", $"{clientId}", $"{clientSecret}"))));
-            //_client.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue("Basic", basicB64);
-            //var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            //content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            //var content = new StringContent(jsonData);
             // Configure required JSON serialization options
             var options = new JsonSerializerOptions()
             {
@@ -157,27 +130,6 @@ namespace RazorPay.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
-            //// Send POST request
-            //var response = await _client.PostAsJsonAsync(uri, paymentLinkRequest, options);
-            //var authenticationString = $"{clientId}:{clientSecret}";
-            //var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
-
-            //var requestMessage = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, uri);
-            //requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
-            //requestMessage.Content = content;
-
-            ////make the request
-            //var response = await _client.SendAsync(requestMessage);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    response.EnsureSuccessStatusCode();
-            //    // Read and deserialize the response content
-            //    var responseContent = await response.Content.ReadAsStringAsync();
-            //    return responseContent;
-            //}
-            //else
-            //    return string.Empty;
-            //PaymentLink paymentlink = client.PaymentLink.Create(paymentLinkRequest);
 
 
             var options1 = new RestClientOptions(baseURL)
@@ -295,39 +247,26 @@ namespace RazorPay.Services
 
         public async Task<string> CreateQRCode()
         {
+            var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/v1/");
+            //Test Mode
             string clientId = "rzp_test_ZL1a7FyyQVVw3h";
             string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
             var uri = "payments/qr_codes";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             Dictionary<string, object> qrRequest = new Dictionary<string, object>();
             qrRequest.Add("type", "upi_qr");
-            qrRequest.Add("name", "Store_1");
+            qrRequest.Add("name", "Gaurav");
             qrRequest.Add("usage", "single_use");
             qrRequest.Add("fixed_amount", true);
             qrRequest.Add("payment_amount", 300);
-            qrRequest.Add("description", "For Store 1");
-            qrRequest.Add("customer_id", "cust_MHYe2dVX323WYD");
-            qrRequest.Add("close_by", DateTime.UtcNow.AddMinutes(15).Ticks);
-            Dictionary<string, object> notes = new Dictionary<string, object>();
-            notes.Add("notes_key_1", "Tea, Earl Grey, Hot");
-            notes.Add("notes_key_2", "Tea, Earl Grey… decaf.");
-            qrRequest.Add("notes", notes);
-
+            //qrRequest.Add("description", "This is test description request. For getting QR Code Test Test Test Test Test Test Test Test Test Test Test Test ");
+            //qrRequest.Add("customer_id", "cust_HKsR5se84c5LTO");
+            qrRequest.Add("close_by", expTime);
+            //Dictionary<string, object> notes = new Dictionary<string, object>();
+            //notes.Add("purpose", "Test UPI QR code notes");
+            //qrRequest.Add("notes", notes);
             var jsonData = JsonConvert.SerializeObject(qrRequest);
-            //            var body = @"{" + "\n" +
-            //@"    ""type"": ""upi_qr""," + "\n" +
-            //@"    ""name"": ""Store_1""," + "\n" +
-            //@"    ""usage"": ""single_use""," + "\n" +
-            //@"    ""fixed_amount"": true," + "\n" +
-            //@"    ""payment_amount"": 300," + "\n" +
-            //@"    ""description"": ""For Store 1""," + "\n" +
-            //@"    ""customer_id"": ""cust_HKsR5se84c5LTO""," + "\n" +
-            //@"    ""close_by"": 1981615838," + "\n" +
-            //@"    ""notes"": {" + "\n" +
-            //@"        ""purpose"": ""Test UPI QR code notes""" + "\n" +
-            //@"    }" + "\n" +
-            //@"}";
             var options1 = new RestClientOptions(baseURL)
             {
                 Timeout = TimeSpan.FromMinutes(10)
@@ -335,9 +274,8 @@ namespace RazorPay.Services
             var client = new RestSharp.RestClient(options1);
             var request = new RestRequest(uri, RestSharp.Method.Post);
             request.AddHeader("Authorization", $"Basic {basicAuthenticationValue}");
-            //request.AddHeader("Content-Type", "application/json");
-            //request.AddStringBody(body, DataFormat.Json);
-            request.AddParameter("text/plain", jsonData, ParameterType.RequestBody);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddStringBody(jsonData, DataFormat.Json);
             RestResponse response = await client.ExecuteAsync(request);
             Console.WriteLine(response.Content);
             return response.Content;
