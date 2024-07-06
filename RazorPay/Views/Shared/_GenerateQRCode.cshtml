@@ -1,0 +1,53 @@
+﻿@model QRCodeResponse
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <label class="form-label">Id</label>
+                <label class="form-label">@Model.id</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Name</label>
+                <label class="form-label">@Model.name</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Amount</label>
+                <label class="form-label">@(Model.payment_amount / 100)</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Image</label>
+                <img src="@Model.image_url" alt="Alternate Text" class="img-fluid img-thumbnail" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Status</label>
+                <label class="form-label">@Model.status</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Fix Payment</label>
+                <label class="form-label">@Model.fixed_amount</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="form-label">Notes</label>
+                <label class="form-label">@Model.notes.purpose</label>
+            </div>
+            @* <div class="col-md-2">
+            <label class="form-label">Currency</label>
+            <label class="form-label">@Model.currency</label>
+            </div>
+            <div class="col-md-2">
+            <label class="form-label">Notify Email</label>
+            <label class="form-label">@Model.notify.email</label>
+            </div>
+            <div class="col-md-2">
+            <label class="form-label">Notify SMS</label>
+            <label class="form-label">@Model.notify.sms</label>
+            </div>
+            <div class="col-md-2">
+            <label class="form-label">Notify WhatsApp</label>
+            <label class="form-label">@Model.notify.whatsapp</label>
+            </div> *@
+        </div>
+    </div>
+</div>

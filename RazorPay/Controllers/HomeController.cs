@@ -53,7 +53,7 @@ namespace RazorPay.Controllers
         [HttpGet]
         public IActionResult CreateANormalRefund(string id, decimal amount)
         {
-            PaymentRefund paymentRefund = new PaymentRefund() { paymentId = id, Amount = amount};
+            PaymentRefund paymentRefund = new PaymentRefund() { paymentId = id, Amount = amount };
             return View(paymentRefund);
         }
         public async Task<IActionResult> CapturePayment(string id, decimal amount)
@@ -80,14 +80,24 @@ namespace RazorPay.Controllers
             return View("_OrderStatus", refund.Attributes["status"].value.ToString());
         }
         [HttpGet]
-        public async Task<IActionResult> StandardPaymentLink()
+        public IActionResult StandardPaymentLink()
         {
-            return View(await _paymentService.CreateStandardPaymentLink());
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> StandardPaymentLink(PaymentLink payment)
+        {
+            return PartialView("_StandardPaymentLink", await _paymentService.CreateStandardPaymentLink(payment.Amount, payment.MobileNo, payment.Name, payment.Email));
         }
         [HttpGet]
-        public async Task<IActionResult> GenerateQRCode()
+        public IActionResult GenerateQRCode()
         {
-            return View(await _paymentService.CreateQRCode());
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GenerateQRCode(QRCode code)
+        {
+            return View("_GenerateQRCode", await _paymentService.CreateQRCode(code.Amount, code.Name));
         }
         public IActionResult Privacy()
         {

@@ -87,7 +87,7 @@ namespace RazorPay.Services
             }
         }
 
-        public async Task<string> CreateStandardPaymentLink()
+        public async Task<PaymentLinkResponse> CreateStandardPaymentLink(decimal Amount, string MobileNo, string Name, string Email)
         {
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
@@ -96,25 +96,26 @@ namespace RazorPay.Services
             string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
             var uri = "v1/payment_links";
             Dictionary<string, object> paymentLinkRequest = new Dictionary<string, object>();
-            paymentLinkRequest.Add("amount", 1000);
+            paymentLinkRequest.Add("amount", (Amount * 100));
             paymentLinkRequest.Add("currency", "INR");
             paymentLinkRequest.Add("accept_partial", false);
             //paymentLinkRequest.Add("first_min_partial_amount", 100);
             paymentLinkRequest.Add("expire_by", expTime);
             //paymentLinkRequest.Add("reference_id", "GauravKumar");
-            paymentLinkRequest.Add("description", "Payment for policy no #23456");
+            //paymentLinkRequest.Add("description", "Payment for policy no #23456");
             Dictionary<string, string> customer = new Dictionary<string, string>();
-            customer.Add("contact", "+918930394008");
-            customer.Add("name", "Gaurav Kumar");
-            customer.Add("email", "gaurav.kumar@example.com");
+            customer.Add("contact", $"+91{MobileNo}");
+            customer.Add("name", $"{Name}");
+            customer.Add("email", $"{Email}");
             paymentLinkRequest.Add("customer", customer);
             Dictionary<string, object> notify = new Dictionary<string, object>();
             notify.Add("sms", true);
             notify.Add("email", true);
+            notify.Add("whatsapp", true);
             paymentLinkRequest.Add("reminder_enable", true);
             //Dictionary<string, object> notes = new Dictionary<string, object>();
             //notes.Add("policy_name", "Jeevan Bima");
-            paymentLinkRequest.Add("notes", notes);
+            //paymentLinkRequest.Add("notes", notes);
             paymentLinkRequest.Add("callback_url", "https://teraclab.com/");
             paymentLinkRequest.Add("callback_method", "get");
             var jsonData = System.Text.Json.JsonSerializer.Serialize(paymentLinkRequest);
@@ -142,8 +143,9 @@ namespace RazorPay.Services
             request.AddHeader("Content-Type", "application/json");
             request.AddStringBody(jsonData, DataFormat.Json);
             RestResponse response = await client.ExecuteAsync(request);
-            Console.WriteLine(response.Content);
-            return response.Content;
+            PaymentLinkResponse linkResponse = JsonConvert.DeserializeObject<PaymentLinkResponse>(response.Content);
+            //Console.WriteLine(response.Content);
+            return linkResponse;
         }
 
         public Task<string> CreateUPIPaymentLink()
@@ -245,7 +247,7 @@ namespace RazorPay.Services
             return credentialCache;
         }
 
-        public async Task<string> CreateQRCode()
+        public async Task<QRCodeResponse> CreateQRCode(decimal Amount, string Name)
         {
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/v1/");
@@ -256,16 +258,16 @@ namespace RazorPay.Services
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             Dictionary<string, object> qrRequest = new Dictionary<string, object>();
             qrRequest.Add("type", "upi_qr");
-            qrRequest.Add("name", "Gaurav");
+            qrRequest.Add("name", $"{Name}");
             qrRequest.Add("usage", "single_use");
             qrRequest.Add("fixed_amount", true);
-            qrRequest.Add("payment_amount", 300);
+            qrRequest.Add("payment_amount", (Amount * 100));
             //qrRequest.Add("description", "This is test description request. For getting QR Code Test Test Test Test Test Test Test Test Test Test Test Test ");
             //qrRequest.Add("customer_id", "cust_HKsR5se84c5LTO");
             qrRequest.Add("close_by", expTime);
-            //Dictionary<string, object> notes = new Dictionary<string, object>();
-            //notes.Add("purpose", "Test UPI QR code notes");
-            //qrRequest.Add("notes", notes);
+            Dictionary<string, object> notes = new Dictionary<string, object>();
+            notes.Add("purpose", "Test UPI QR code notes");
+            qrRequest.Add("notes", notes);
             var jsonData = JsonConvert.SerializeObject(qrRequest);
             var options1 = new RestClientOptions(baseURL)
             {
@@ -277,8 +279,8 @@ namespace RazorPay.Services
             request.AddHeader("Content-Type", "application/json");
             request.AddStringBody(jsonData, DataFormat.Json);
             RestResponse response = await client.ExecuteAsync(request);
-            Console.WriteLine(response.Content);
-            return response.Content;
+            QRCodeResponse codeResponse = JsonConvert.DeserializeObject<QRCodeResponse>(response.Content);
+            return codeResponse;
         }
     }
 }
