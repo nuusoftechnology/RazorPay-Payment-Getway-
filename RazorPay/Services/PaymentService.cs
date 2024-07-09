@@ -116,7 +116,7 @@ namespace RazorPay.Services
             //Dictionary<string, object> notes = new Dictionary<string, object>();
             //notes.Add("policy_name", "Jeevan Bima");
             //paymentLinkRequest.Add("notes", notes);
-            paymentLinkRequest.Add("callback_url", "https://teraclab.com/");
+            paymentLinkRequest.Add("callback_url", "https://nuusoftechnology.com/");
             paymentLinkRequest.Add("callback_method", "get");
             var jsonData = System.Text.Json.JsonSerializer.Serialize(paymentLinkRequest);
             var basicAuthenticationValue =
