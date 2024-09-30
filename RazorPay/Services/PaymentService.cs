@@ -16,9 +16,7 @@ namespace RazorPay.Services
         protected HttpClient _client;
         public PaymentService()
         {
-            //client = new RazorpayClient("--key--", "--secret--");
-            client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
-            //var credentials = new NetworkCredential("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
+            client = new RazorpayClient("--key--", "--secret--");
             //var handler = new HttpClientHandler { Credentials = credentials };
             _client = new HttpClient();
         }
