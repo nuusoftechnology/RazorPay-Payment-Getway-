@@ -26,7 +26,6 @@ namespace RazorPay.Services
             Dictionary<string, object> paymentRequest = new Dictionary<string, object>();
             paymentRequest.Add("amount", amount);
             paymentRequest.Add("currency", "INR");
-
             Payment payment = client.Payment.Fetch(PaymentId).Capture(paymentRequest);
             return await Task.FromResult(payment);
         }
@@ -85,7 +84,7 @@ namespace RazorPay.Services
             }
         }
 
-        public async Task<PaymentLinkResponse> CreateStandardPaymentLink(decimal Amount, string MobileNo, string Name, string Email)
+        public async Task<PaymentLinkResponse> CreateStandardPaymentLink(decimal Amount, string MobileNo, string Name, string Email, string CallBackURL)
         {
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
@@ -114,7 +113,7 @@ namespace RazorPay.Services
             //Dictionary<string, object> notes = new Dictionary<string, object>();
             //notes.Add("policy_name", "Jeevan Bima");
             //paymentLinkRequest.Add("notes", notes);
-            paymentLinkRequest.Add("callback_url", "https://nuusoftechnology.com/");
+            paymentLinkRequest.Add("callback_url", CallBackURL);
             paymentLinkRequest.Add("callback_method", "get");
             var jsonData = System.Text.Json.JsonSerializer.Serialize(paymentLinkRequest);
             var basicAuthenticationValue =

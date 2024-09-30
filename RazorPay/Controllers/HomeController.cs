@@ -87,10 +87,16 @@ namespace RazorPay.Controllers
         [HttpPost]
         public async Task<IActionResult> StandardPaymentLink(PaymentLink payment)
         {
-            return PartialView("_StandardPaymentLink", await _paymentService.CreateStandardPaymentLink(payment.Amount, payment.MobileNo, payment.Name, payment.Email));
+            var myUrl = Url.ActionLink(nameof(CheckPaymentStatus), "Home",new { PaymentId = payment.Email, Amount = payment.Amount });
+            return PartialView("_StandardPaymentLink", await _paymentService.CreateStandardPaymentLink(payment.Amount, payment.MobileNo, payment.Name, payment.Email, myUrl));
         }
         [HttpGet]
         public IActionResult GenerateQRCode()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult CheckPaymentStatus(string PaymentId, string Amount)
         {
             return View();
         }
