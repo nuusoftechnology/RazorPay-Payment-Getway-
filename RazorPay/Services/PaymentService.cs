@@ -90,8 +90,8 @@ namespace RazorPay.Services
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "v1/payment_links";
             Dictionary<string, object> paymentLinkRequest = new Dictionary<string, object>();
             paymentLinkRequest.Add("amount", (Amount * 100));
@@ -250,8 +250,8 @@ namespace RazorPay.Services
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/v1/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "payments/qr_codes";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             Dictionary<string, object> qrRequest = new Dictionary<string, object>();
