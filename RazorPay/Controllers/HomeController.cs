@@ -99,7 +99,10 @@ namespace RazorPay.Controllers
         public async Task<IActionResult> CheckPaymentStatus(string Amount, string razorpay_payment_id, string razorpay_signature, string razorpay_order_id)
         {
             var captureStatus = await _paymentService.CapturePayment(razorpay_payment_id, Convert.ToDecimal(Amount));
-            return View();
+            if (captureStatus.Attributes["status"].Value == "captured")
+                return RedirectToAction(nameof(status), new { status = "Success" });
+            else
+                return RedirectToAction(nameof(status), new { status = "failed" });
         }
         [HttpPost]
         public async Task<IActionResult> GenerateQRCode(QRCode code)
