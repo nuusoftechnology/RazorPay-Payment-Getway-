@@ -26,7 +26,7 @@ namespace RazorPay.Services
             Dictionary<string, object> paymentRequest = new Dictionary<string, object>();
             paymentRequest.Add("amount", amount);
             paymentRequest.Add("currency", "INR");
-            Payment payment = client.Payment.Fetch(PaymentId).Capture(paymentRequest);
+            Payment payment = client.Payment.Fetch(PaymentId);/*.Capture(paymentRequest);*/
             return await Task.FromResult(payment);
         }
 
@@ -89,8 +89,8 @@ namespace RazorPay.Services
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
             //Test Mode
-            string clientId = "--key--";
-            string clientSecret = "--secret--";
+            string clientId = "--Key--";
+            string clientSecret = "--sec--";
             var uri = "v1/payment_links";
             Dictionary<string, object> paymentLinkRequest = new Dictionary<string, object>();
             paymentLinkRequest.Add("amount", (Amount * 100));
@@ -177,7 +177,6 @@ namespace RazorPay.Services
 
         public async Task<List<Refund>> FetchMultipleRefunds(string paymentId)
         {
-            //String paymentId = "pay_Z6t7VFTb9xHeOs";
             Dictionary<string, object> paramRequest = new Dictionary<string, object>();
             //paramRequest.Add("from", "1");
             //paramRequest.Add("to", "1");
@@ -250,7 +249,7 @@ namespace RazorPay.Services
             var baseURL = new Uri("https://api.razorpay.com/v1/");
             //Test Mode
             string clientId = "--key--";
-            string clientSecret = "--secret--";
+            string clientSecret = "--sec--";
             var uri = "payments/qr_codes";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             Dictionary<string, object> qrRequest = new Dictionary<string, object>();
