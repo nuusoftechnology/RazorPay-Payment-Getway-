@@ -24,6 +24,7 @@ namespace RazorPay.IServices
         //Task<Settlement> FetchAsettlement(string settlementId);
         //Payment Link
         Task<PaymentLinkResponse> CreateStandardPaymentLink(decimal Amount, string MobileNo, string Name, string Email, string CallBackURL);
+        Task<PaymentItem> GetPayemtLink(string Id);
         //Task<string> CreateUPIPaymentLink();
         Task<QRCodeResponse> CreateQRCode(decimal Amount, string Name);
     }

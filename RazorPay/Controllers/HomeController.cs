@@ -109,6 +109,17 @@ namespace RazorPay.Controllers
         {
             return View("_GenerateQRCode", await _paymentService.CreateQRCode(code.Amount, code.Name));
         }
+        [HttpGet]
+        public IActionResult GetPaymentLinkStatus()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetPaymentLinkStatus(string TranId)
+        {
+            var data = await _paymentService.GetPayemtLink(TranId);
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

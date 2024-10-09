@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Get Payment Link Status";
+}
+<div class="container">
+    <form asp-action="GetPaymentLinkStatus" asp-antiforgery="true" asp-controller="Home" autocomplete="off">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Transaction Id</label>
+                        <input id="TranId" name="TranId" placeholder="Enter Transaction Id" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <input type="submit" value="Get Status" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
