@@ -17,8 +17,7 @@ namespace RazorPay.Services
         protected HttpClient _client;
         public PaymentService()
         {
-            //client = new RazorpayClient("--key--", "--secret--");
-            client = new RazorpayClient("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
+            client = new RazorpayClient("--key--", "--secret--");
             //var credentials = new NetworkCredential("rzp_test_ZL1a7FyyQVVw3h", "stuoN7OM8kNOYtZzIc4s4Ukb");
             //var handler = new HttpClientHandler { Credentials = credentials };
             _client = new HttpClient();
@@ -92,8 +91,8 @@ namespace RazorPay.Services
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "v1/payment_links";
             Dictionary<string, object> paymentLinkRequest = new Dictionary<string, object>();
             paymentLinkRequest.Add("amount", (Amount * 100));
@@ -252,8 +251,8 @@ namespace RazorPay.Services
             var expTime = TimeProvider.System.GetUtcNow().AddDays(1).ToUnixTimeSeconds();
             var baseURL = new Uri("https://api.razorpay.com/v1/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "payments/qr_codes";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             Dictionary<string, object> qrRequest = new Dictionary<string, object>();
@@ -287,8 +286,8 @@ namespace RazorPay.Services
         {
             var baseURL = new Uri("https://api.razorpay.com/v1/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "payment_links";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             var options1 = new RestClientOptions(baseURL)
@@ -315,8 +314,8 @@ namespace RazorPay.Services
         {
             var baseURL = new Uri("https://api.razorpay.com/v1/");
             //Test Mode
-            string clientId = "rzp_test_ZL1a7FyyQVVw3h";
-            string clientSecret = "stuoN7OM8kNOYtZzIc4s4Ukb";
+            string clientId = "--key--";
+            string clientSecret = "--secret--";
             var uri = "payments";
             var basicAuthenticationValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
             var options1 = new RestClientOptions(baseURL)
@@ -327,7 +326,6 @@ namespace RazorPay.Services
             var request = new RestRequest(uri, RestSharp.Method.Get);
             request.AddHeader("Authorization", $"Basic {basicAuthenticationValue}");
             request.AddHeader("Content-Type", "application/json");
-            //request.AddStringBody(jsonData, DataFormat.Json);
             RestResponse response = await client.ExecuteAsync(request);
             Payments codeResponse = JsonConvert.DeserializeObject<Payments>(response.Content);
             return codeResponse;
